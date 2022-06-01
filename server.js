@@ -4,6 +4,8 @@ const port = 4000;
 
 const booksRouter = require("./routes/booksRouter");
 const authRouter = require("./routes/authRouter");
+const userRouter = require("./routes/usersRouter");
+const myInfoRouter = require("./routes/myinfoRouter");
 
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
@@ -14,6 +16,8 @@ app.get("/", (req, res) => {
 
 app.use("/books", booksRouter.router);
 app.use("/auth", authRouter.router);
+app.use("/users", userRouter.router);
+app.use("/me", myInfoRouter.router);
 
 app.listen(port, () => {
   console.log(`Listening on port ${port}`);

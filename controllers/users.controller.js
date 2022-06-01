@@ -1,5 +1,6 @@
 const { v4 } = require("uuid");
 const model = require("../models/users");
+const jwt = require("jsonwebtoken");
 
 function addUser(req, res) {
   const user = {
@@ -17,15 +18,16 @@ function addUser(req, res) {
 function logingUser(req, res) {
   let authorized = false;
   const users = model.getAll();
-  const username = users.filter((user) => user.username === req.body.username);
+  const user = users.filter((user) => user.username === req.body.username);
   const password = users.filter((user) => user.password === req.body.password);
   console.log(password);
-  if (password.length > 0 && username.length > 0) {
+  if (password.length > 0 && user.length > 0) {
     authorized = true;
   }
-  console.log(authorized);
+
   if (authorized) {
-    res.json({ jwtToken: "1234dsjsdkjc44" });
+    const token = jwt.sign({ user }, "secret_key");
+    res.json({ jwtToken: token });
   } else {
     res.status(404).json({ info: "invalid username or password" });
     return;
