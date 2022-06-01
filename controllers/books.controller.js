@@ -1,4 +1,3 @@
-const parse = require("nodemon/lib/cli/parse");
 const { v4 } = require("uuid");
 const model = require("../models/books");
 
