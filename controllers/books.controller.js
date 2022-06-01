@@ -11,7 +11,7 @@ function getBookById(req, res) {
   try {
     console.log(req.params.id);
     const books = model.getAllBooks();
-    const result = books.filter((book) => book.id === parseInt(req.params.id));
+    const result = books.filter((book) => book.id === req.params.id);
     if (result.length > 0) {
       res.json({ info: "book found", book: result });
     } else {
@@ -46,16 +46,14 @@ function addBook(req, res) {
 function changeBookFull(req, res) {
   try {
     const books = model.getAllBooks();
-    const book = books.filter((book) => book.id === parseInt(req.params.id));
+    const book = books.filter((book) => book.id === req.params.id);
     if (!book[0]) {
       res
         .status(404)
         .json({ info: "couldnt find book, make sure id is correct" });
       return;
     }
-    const updatedBooks = books.filter(
-      (book) => book.id !== parseInt(req.params.id)
-    );
+    const updatedBooks = books.filter((book) => book.id !== req.params.id);
     const newbook = {
       title: req.body.title,
       author: req.body.author,
@@ -71,4 +69,35 @@ function changeBookFull(req, res) {
   }
 }
 
-module.exports = { getAllBooks, getBookById, addBook, changeBookFull };
+function changeBookPartial(req, res) {
+  try {
+    const books = model.getAllBooks();
+    let book = books.filter((book) => book.id === req.params.id);
+    if (book.length === 0) {
+      res
+        .status(404)
+        .json({ info: "couldnt find book, make sure id is correct" });
+      return;
+    }
+
+    const updatedBooks = books.filter((book) => book.id !== req.params.id);
+    book = {
+      title: req.body.title || book.title,
+      author: req.body.author || book.author,
+      id: book[0].id,
+    };
+    updatedBooks.push(book);
+    const result = model.updateBooks(updatedBooks);
+    res.json(book);
+  } catch (err) {
+    console.log(`something went wrong in changeBookPartial, ${err} `);
+  }
+}
+
+module.exports = {
+  getAllBooks,
+  getBookById,
+  addBook,
+  changeBookFull,
+  changeBookPartial,
+};

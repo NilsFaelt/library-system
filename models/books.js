@@ -1,7 +1,4 @@
-let allBooks = [
-  { name: "bok1", id: 1 },
-  { name: "bok2", id: 2 },
-];
+let allBooks = [];
 
 function getAllBooks() {
   return allBooks;

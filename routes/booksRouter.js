@@ -6,5 +6,6 @@ router.get("/", booksController.getAllBooks);
 router.get("/:id", booksController.getBookById);
 router.post("/", booksController.addBook);
 router.put("/:id", booksController.changeBookFull);
+router.patch("/:id", booksController.changeBookPartial);
 
 module.exports = { router };
