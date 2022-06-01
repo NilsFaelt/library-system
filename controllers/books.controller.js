@@ -94,10 +94,29 @@ function changeBookPartial(req, res) {
   }
 }
 
+function deleteBook(req, res) {
+  try {
+    const books = model.getAllBooks();
+    const book = books.filter((book) => book.id === req.params.id);
+    const updatedBooks = books.filter((book) => book.id !== req.params.id);
+    if (book.length === 0) {
+      res
+        .status(404)
+        .json({ info: "couldnt delete book, make sure id is correct" });
+      return;
+    }
+    model.updateBooks(updatedBooks);
+    res.json({ info: "book were succesfully deleted", deltedbook: book });
+  } catch (err) {
+    console.log(`something went wrong in deleteBook, ${err} `);
+  }
+}
+
 module.exports = {
   getAllBooks,
   getBookById,
   addBook,
   changeBookFull,
   changeBookPartial,
+  deleteBook,
 };
