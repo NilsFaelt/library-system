@@ -2,9 +2,9 @@ const express = require("express");
 const res = require("express/lib/response");
 const router = express.Router();
 
-router.post("/lend", (req, res) => {
-  res.send("ledning");
-});
+const usersController = require("../controllers/users.controller");
+
+router.post("/lend", usersController.lendBook);
 
 router.post("/return", (req, res) => {
   res.send("returining");
