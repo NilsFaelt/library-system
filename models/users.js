@@ -1,4 +1,4 @@
-const authorizedUsers = [];
+let authorizedUsers = [];
 
 function getAll() {
   return authorizedUsers;
@@ -9,4 +9,9 @@ function addUser(user) {
   return authorizedUsers;
 }
 
-module.exports = { getAll, addUser };
+function updateAllUsers(updateAllUsers) {
+  authorizedUsers = updateAllUsers;
+  return authorizedUsers;
+}
+
+module.exports = { getAll, addUser, updateAllUsers };

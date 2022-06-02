@@ -6,8 +6,6 @@ const usersController = require("../controllers/users.controller");
 
 router.post("/lend", usersController.lendBook);
 
-router.post("/return", (req, res) => {
-  res.send("returining");
-});
+router.post("/return", usersController.returnBook);
 
 module.exports = { router };

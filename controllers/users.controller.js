@@ -37,14 +37,61 @@ function logingUser(req, res) {
 }
 
 function lendBook(req, res) {
-  const users = model.getAll();
-  const books = bookModel.getAllBooks();
-  const book = books.filter((book) => book.id === req.body.bookId);
-  const updatedBooks = books.filter((book) => book.id !== req.body.bookId);
-  const user = users.filter((user) => user.id === req.body.userId);
-  user[0].borrowedBooks.push(book);
-  bookModel.updateBooks(updatedBooks);
-  res.json({ user });
+  try {
+    const users = model.getAll();
+    const books = bookModel.getAllBooks();
+    const book = books.filter((book) => book.id === req.body.bookId);
+    const updatedBooks = books.filter((book) => book.id !== req.body.bookId);
+    const user = users.filter((user) => user.id === req.body.userId);
+
+    if (user.length > 0 && book.length > 0) {
+      user[0].borrowedBooks.push(book[0]);
+      bookModel.updateBooks(updatedBooks);
+      res.json({ info: "book lended, please return in time", user: user });
+    } else {
+      res.status(404).json({
+        info: "coudlnt find user or book, make sure the book and user exists, and that the book is in stock",
+      });
+    }
+  } catch (err) {
+    console.log(`something went wrong in lendBook, ${err}`);
+  }
 }
 
-module.exports = { addUser, logingUser, lendBook };
+function returnBook(req, res) {
+  try {
+    const books = bookModel.getAllBooks();
+    const users = model.getAll();
+    const updatedUsers = users.filter((user) => user.id !== req.body.userId);
+    let user = users.filter((user) => user.id === req.body.userId);
+    const bookToReurn = user[0].borrowedBooks.filter(
+      (book) => book.id === req.body.bookId
+    );
+    const usersLendedBooks = user[0].borrowedBooks.filter(
+      (book) => book.id !== req.body.bookId
+    );
+    console.log(usersLendedBooks, "usersLendedBooks");
+    console.log(bookToReurn, "bookToReurn");
+    console.log(user, "user");
+    if (user.length > 0 && bookToReurn.length > 0) {
+      user[0].borrowedBooks = usersLendedBooks;
+      books.push(bookToReurn[0]);
+      bookModel.updateBooks(books);
+      updatedUsers.push(user);
+      model.updateAllUsers(updatedUsers);
+      res.json({
+        info: "book succesfully returned",
+        returnedBook: bookToReurn[0],
+      });
+    } else {
+      res
+        .status(404)
+        .json({ info: "couldnt find user or book, mske sure id is correct" });
+    }
+    return;
+  } catch (err) {
+    console.log(`something went wrong in return book ${err}`);
+  }
+}
+
+module.exports = { addUser, logingUser, lendBook, returnBook };
