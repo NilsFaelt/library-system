@@ -1,3 +1,5 @@
+require("dotenv").config();
+
 const { v4 } = require("uuid");
 const model = require("../models/users");
 const bookModel = require("../models/books");
@@ -26,9 +28,8 @@ function logingUser(req, res) {
   if (password.length > 0 && user.length > 0) {
     authorized = true;
   }
-
   if (authorized) {
-    const token = jwt.sign({ user }, "secret_key");
+    const token = jwt.sign({ user }, "process.env.ACCES_TOKEN_SECRET");
     res.json({ jwtToken: token });
   } else {
     res.status(404).json({ info: "invalid username or password" });
@@ -43,6 +44,10 @@ function lendBook(req, res) {
     const book = books.filter((book) => book.id === req.body.bookId);
     const updatedBooks = books.filter((book) => book.id !== req.body.bookId);
     const user = users.filter((user) => user.id === req.body.userId);
+    console.log(users);
+    console.log(books);
+    console.log(user);
+    console.log(book);
 
     if (user.length > 0 && book.length > 0) {
       user[0].borrowedBooks.push(book[0]);

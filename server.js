@@ -2,6 +2,8 @@ const express = require("express");
 const app = express();
 const port = 4000;
 
+const authMiddleware = require("./middlewares/authorizedToUseRoutes");
+
 const booksRouter = require("./routes/booksRouter");
 const authRouter = require("./routes/authRouter");
 const userRouter = require("./routes/usersRouter");
@@ -16,8 +18,8 @@ app.get("/", (req, res) => {
 
 app.use("/books", booksRouter.router);
 app.use("/auth", authRouter.router);
-app.use("/users", userRouter.router);
-app.use("/me", myInfoRouter.router);
+app.use("/users", authMiddleware.authorizedToUseRoutes, userRouter.router);
+app.use("/me", authMiddleware.authorizedToUseRoutes, myInfoRouter.router);
 
 app.listen(port, () => {
   console.log(`Listening on port ${port}`);
