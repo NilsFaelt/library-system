@@ -1,5 +1,3 @@
-require("dotenv").config();
-
 const { v4 } = require("uuid");
 const model = require("../models/users");
 const bookModel = require("../models/books");
@@ -29,7 +27,8 @@ function logingUser(req, res) {
     authorized = true;
   }
   if (authorized) {
-    const token = jwt.sign({ user }, "process.env.ACCES_TOKEN_SECRET");
+    console.log(process.env.ACCES_TOKEN_SECRET, "TOOOOOOOOKEEEEEEEEN");
+    const token = jwt.sign({ user }, process.env.ACCES_TOKEN_SECRET);
     res.json({ jwtToken: token });
   } else {
     res.status(404).json({ info: "invalid username or password" });

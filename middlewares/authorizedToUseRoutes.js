@@ -7,7 +7,7 @@ const authorizedToUseRoutes = (req, res, next) => {
     return res.status(403).json({
       info: "this route is protected, makes sure you have the right auth",
     });
-  jwt.verify(token, "process.env.ACCES_TOKEN_SECRET", (err, user) => {
+  jwt.verify(token, process.env.ACCES_TOKEN_SECRET, (err, user) => {
     if (err) {
       res.status(403).json({ info: "no accesrights to this route" });
     }
