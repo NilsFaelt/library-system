@@ -28,6 +28,7 @@ function addBook(req, res) {
     const newBook = {
       title: req.body.title || "undefined",
       author: req.body.author || "undefined",
+      genre: req.body.genre || "undefined",
       id: v4(),
     };
     if (!req.body.title) {
@@ -56,6 +57,7 @@ function changeBookFull(req, res) {
     const newbook = {
       title: req.body.title,
       author: req.body.author,
+      genre: req.body.genre || "undefined",
       id: book[0].id,
     };
     updatedBooks.push(newbook);
@@ -83,6 +85,7 @@ function changeBookPartial(req, res) {
     book = {
       title: req.body.title || book.title,
       author: req.body.author || book.author,
+      genre: req.body.genre || book[0].genre,
       id: book[0].id,
     };
     updatedBooks.push(book);

@@ -2,7 +2,7 @@ require("dotenv").config();
 const express = require("express");
 const app = express();
 const port = 4000;
-console.log(require("dotenv").config());
+
 const authMiddleware = require("./middlewares/authorizedToUseRoutes");
 
 const booksRouter = require("./routes/booksRouter");

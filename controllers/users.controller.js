@@ -27,7 +27,6 @@ function logingUser(req, res) {
     authorized = true;
   }
   if (authorized) {
-    console.log(process.env.ACCES_TOKEN_SECRET, "TOOOOOOOOKEEEEEEEEN");
     const token = jwt.sign({ user }, process.env.ACCES_TOKEN_SECRET);
     res.json({ jwtToken: token });
   } else {
